@@ -1,0 +1,15 @@
+{% extends 'layouts/page.njk' %}
+
+{% block content %}
+
+  {{ appHeading({
+    text: heading,
+    caption: "Product information",
+    entities: headingEntities
+  }) }}
+
+  {% call appPageBody() %}
+    <p>{{ product.description }}</p>
+  {% endcall %}
+
+{% endblock %}

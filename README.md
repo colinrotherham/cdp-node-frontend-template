@@ -3,21 +3,21 @@
 Core delivery platform Node.js Frontend Template.
 
 - [Requirements](#requirements)
-    - [Node.js](#nodejs)
+  - [Node.js](#nodejs)
 - [Local development](#local-development)
-    - [Setup](#setup)
-    - [Development](#development)
-    - [Local JSON API](#local-json-api)
-    - [Production](#production)
-    - [Npm scripts](#npm-scripts)
+  - [Setup](#setup)
+  - [Development](#development)
+  - [Local JSON API](#local-json-api)
+  - [Production](#production)
+  - [Npm scripts](#npm-scripts)
 - [Versioning](#versioning)
-    - [Auto minor versioning](#auto-minor-versioning)
-    - [Major or Patch versioning](#major-or-patch-versioning)
+  - [Auto minor versioning](#auto-minor-versioning)
+  - [Major or Patch versioning](#major-or-patch-versioning)
 - [Docker](#docker)
-    - [Development Image](#development-image)
-    - [Production Image](#production-image)
+  - [Development Image](#development-image)
+  - [Production Image](#production-image)
 - [Licence](#licence)
-    - [About the licence](#about-the-licence)
+  - [About the licence](#about-the-licence)
 
 ## Requirements
 
