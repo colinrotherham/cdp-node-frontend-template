@@ -11,6 +11,7 @@ permissions:
 
 env:
   AWS_REGION: eu-west-2
+  AWS_ACCOUNT_ID: 163841473800
 
 jobs:
   build:
@@ -19,6 +20,14 @@ jobs:
     if: github.actor != 'cdp-gh-bot[bot]'
 
     steps:
+      # Using IAM role based for OIDC identity provider
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-role
+      - run: aws sts get-caller-identity
+
       # Get Github actions secrets from ASM
       - name: Get Github actions secrets from ASM
         uses: aws-actions/aws-secretsmanager-get-secrets@v1
@@ -53,13 +62,6 @@ jobs:
       - name: Build manifest
         run: |
           ./ci/create-build-manifest.sh
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ env.GH_ACTIONS_AWS_ACCOUNT_ID }}:role/github-actions-role
-      - run: aws sts get-caller-identity
 
       - name: Login to Amazon ECR
         id: login-ecr
