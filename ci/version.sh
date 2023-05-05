@@ -18,7 +18,7 @@ if [ "$NPM_VERSION" != "$VERSION_ZERO" ]; then
     git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 fi
 
-if [ $(git tag -l "$NPM_VERSION") ]; then
+if [ $(git tag -l "$NPM_VERSION") ] || [ "$NPM_VERSION" == "$VERSION_ZERO" ]; then
 # If current version tag exists on GitHub then bump minor version and push commit and tag
     npm version minor
     NEW_NPM_VERSION=$(npm pkg get version | xargs)
