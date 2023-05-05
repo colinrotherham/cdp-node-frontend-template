@@ -1,0 +1,24 @@
+{% extends 'layouts/page.njk' %}
+
+{% from "entity-list/macro.njk" import appEntityList %}
+
+{% block content %}
+
+  {{ appHeading({
+    text: heading,
+    caption: "Farming products."
+  }) }}
+
+  {{ appEntityList({
+    headings: [
+      { text: 'Product', size: 'medium'},
+      { text: 'Owner', size: 'medium'},
+      { text: 'Condition', size: 'small'},
+      { text: 'Cost', size: 'medium'},
+      { text: 'Available', size: 'large'}
+    ],
+    entityRows: entityRows,
+    noResult: 'Currently there are no farming products'
+  }) }}
+
+{% endblock %}

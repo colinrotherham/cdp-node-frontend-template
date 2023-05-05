@@ -1,0 +1,31 @@
+{% from "entity/macro.njk" import appEntity %}
+
+<div class="govuk-grid-row app-heading" data-testid="app-heading">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2"
+        data-testid="app-heading-title">{{ params.text }}</h1>
+
+    {% if params.caption %}
+      <span class="govuk-caption-m"
+            data-testid="app-heading-caption">{{ params.caption }}</span>
+    {% endif %}
+
+    {% if params.entities.primary.length %}
+      <div class="app-heading-entities">
+        {% for entity in params.entities.primary %}
+          {{ appEntity(entity) }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if params.entities.secondary.length %}
+    <div class="govuk-grid-column-one-third app-heading-secondary-info">
+      <div class="app-heading-entities">
+        {% for entity in params.entities.secondary %}
+          {{ appEntity(entity) }}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>

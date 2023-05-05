@@ -1,0 +1,17 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2022": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": ["standard", "prettier", "plugin:wdio/recommended"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "plugins": ["wdio"],
+  "rules": {},
+  "ignorePatterns": [".server", ".public", "src/__fixtures__", "coverage"]
+}

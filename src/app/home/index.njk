@@ -1,0 +1,13 @@
+{% extends 'layouts/page.njk' %}
+
+{% block content %}
+  {{ appHeading({
+    text: heading,
+    caption: "Core delivery platform $serviceName." | replace('$serviceName', serviceName)
+  }) }}
+
+  {% call appPageBody() %}
+    <p>Welcome to the {{ serviceName }}, a starter kit for Core Delivery Platform Node.js Frontends 🚀</p>
+  {% endcall %}
+
+{% endblock %}
