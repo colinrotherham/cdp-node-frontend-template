@@ -33,7 +33,7 @@ jobs:
         uses: aws-actions/aws-secretsmanager-get-secrets@v1
         with:
           secret-ids: |
-            gh_actions
+            cdp/platform/gh_actions
           parse-json-secrets: true
 
       # Get Github app private key from ASM
@@ -41,13 +41,13 @@ jobs:
         uses: aws-actions/aws-secretsmanager-get-secrets@v1
         with:
           secret-ids: |
-            CDP_GH_BOT_PRIVATE_KEY,gh_actions/gh_apps/cdp-gh-bot/private-key
+            CDP_GH_BOT_PRIVATE_KEY,cdp/platform/gh_apps/cdp-gh-bot/private-key
 
       - name: Get GitHub Token from cdp-gh-bot GitHub app
         id: cdp-gh-bot
         uses: getsentry/action-github-app-token@v2
         with:
-          app_id: ${{ env.GH_ACTIONS_CDP_GH_BOT_ID }}
+          app_id: ${{ env.CDP_PLATFORM_GH_ACTIONS_CDP_GH_BOT_ID }}
           private_key: ${{ env.CDP_GH_BOT_PRIVATE_KEY }}
 
       - name: Checkout
