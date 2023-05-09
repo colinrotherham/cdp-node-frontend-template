@@ -1,7 +1,4 @@
-import { createLogger } from '~/src/common/helpers/logger'
-
 function catchAll(request, h) {
-  const logger = createLogger()
   const { response } = request
 
   if (!response.isBoom) {
@@ -9,8 +6,6 @@ function catchAll(request, h) {
   }
 
   const statusCode = response.output.statusCode
-
-  logger.error(response.message, statusCode)
 
   return h
     .view('error/index', {
