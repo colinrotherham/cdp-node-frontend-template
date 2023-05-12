@@ -4,10 +4,9 @@ module.exports = {
   verbose: true,
   resetModules: true,
   clearMocks: true,
-  restoreMocks: true,
   silent: true,
   testMatch: ['**/src/**/*.test.js'],
-  reporters: [['github-actions', { silent: false }], 'summary'],
+  reporters: ['default', ['github-actions', { silent: false }], 'summary'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
   collectCoverageFrom: ['src/**/*.js'],
   coveragePathIgnorePatterns: [
