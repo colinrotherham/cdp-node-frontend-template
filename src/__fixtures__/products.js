@@ -31,4 +31,4 @@ const productsFixture = [
   }
 ]
 
-export {productsFixture}
+export { productsFixture }
