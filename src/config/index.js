@@ -45,12 +45,6 @@ const appConfig = convict({
     default: '/cdp-node-frontend-template',
     env: 'APP_PATH_PREFIX'
   },
-  apiUrl: {
-    doc: 'API url',
-    format: String,
-    default: 'http://localhost:3004/mock-api',
-    env: 'API_URL'
-  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,
