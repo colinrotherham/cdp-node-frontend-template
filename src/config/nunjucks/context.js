@@ -24,11 +24,6 @@ function buildNavigation(request) {
       text: 'Home',
       url: appPathPrefix,
       isActive: request.path === `${appPathPrefix}`
-    },
-    {
-      text: 'Products',
-      url: `${appPathPrefix}/products`,
-      isActive: request.path.includes(`${appPathPrefix}/products`)
     }
   ]
 }
