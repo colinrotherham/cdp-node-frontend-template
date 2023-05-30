@@ -32,7 +32,7 @@ const appConfig = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'Node.js Frontend Template'
+    default: 'CDP Node.js Frontend Template'
   },
   root: {
     doc: 'Project root',
