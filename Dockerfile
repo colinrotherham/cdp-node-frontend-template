@@ -1,34 +1,44 @@
 ARG PARENT_VERSION=2.1.2-node18.11.0
 ARG PORT=3000
-#ARG PORT_DEBUG=9229
+ARG PORT_DEBUG=9229
 
-# TODO this is a hack to improve deploy time for the demo. This file needs reverting post demo
-# TODO fix the fact that the front assets are not being built for production
+FROM defradigital/node-development:${PARENT_VERSION} AS development
 
-#FROM defradigital/node-development:${PARENT_VERSION} AS development
-#ARG PARENT_VERSION
-#LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSION}
-#
-#ARG PORT
-#ARG PORT_DEBUG
-#ENV PORT ${PORT}
-#EXPOSE ${PORT} ${PORT_DEBUG}
-#
-#COPY --chown=node:node package*.json ./
-#RUN npm install
-#COPY --chown=node:node . .
-#RUN npm run build
-#
-#CMD [ "npm", "run", "docker:dev" ]
+ENV TZ="Europe/London"
+
+ARG PARENT_VERSION
+LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSION}
+
+ARG PORT
+ARG PORT_DEBUG
+ENV PORT ${PORT}
+EXPOSE ${PORT} ${PORT_DEBUG}
+
+COPY --chown=node:node package*.json ./
+RUN npm install
+COPY --chown=node:node . .
+RUN npm run build
+
+CMD [ "npm", "run", "docker:dev" ]
+
+FROM development as productionBuild
+
+ENV NODE_ENV production
+
+RUN npm run build
 
 FROM defradigital/node:${PARENT_VERSION} AS production
+
+ENV TZ="Europe/London"
+
 ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 
-COPY --chown=node:node package*.json ./
-RUN npm install --production=false
-COPY --chown=node:node . .
-RUN npm run build
+COPY --from=productionBuild /home/node/package*.json ./
+COPY --from=productionBuild /home/node/.server ./.server/
+COPY --from=productionBuild /home/node/.public/ ./.public/
+
+RUN npm ci --omit=dev
 
 ARG PORT
 ENV PORT ${PORT}

@@ -1,7 +1,7 @@
 import path from 'path'
 
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/common/helpers/logger'
+import { createLogger } from '~/src/server/common/helpers/logger'
 
 const logger = createLogger()
 const appPathPrefix = appConfig.get('appPathPrefix')

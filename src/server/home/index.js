@@ -1,4 +1,4 @@
-import { homeController } from '~/src/app/home/controller'
+import { homeController } from '~/src/server/home/controller'
 
 const home = {
   plugin: {
