@@ -6,15 +6,20 @@ const WebpackAssetsManifest = require('webpack-assets-manifest')
 const webpackConfig = {
   isDevelopment: process.env.NODE_ENV !== 'production',
   stylesheets: {
-    components: path.resolve(__dirname, 'src', 'common', 'components')
+    components: path.resolve(__dirname, 'src', 'server', 'common', 'components')
   }
 }
 
 module.exports = {
   entry: {
-    application: './src/common/assets/javascripts/application.js'
+    application: './src/client/assets/javascripts/application.js'
   },
   mode: webpackConfig.isDevelopment ? 'development' : 'production',
+  ...(webpackConfig.isDevelopment && { devtool: 'source-map' }),
+  watchOptions: {
+    aggregateTimeout: 200,
+    poll: 1000
+  },
   output: {
     filename: 'js/[name].[fullhash].js',
     path: path.resolve(__dirname, '.public'),
@@ -22,6 +27,15 @@ module.exports = {
   },
   module: {
     rules: [
+      ...(webpackConfig.isDevelopment
+        ? [
+            {
+              test: /\.js$/,
+              enforce: 'pre',
+              use: ['source-map-loader']
+            }
+          ]
+        : []),
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -62,14 +76,14 @@ module.exports = {
         test: /\.(png|svg|jpe?g|gif|ico)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name].[contenthash].[ext]'
+          filename: 'images/[name].[contenthash][ext]'
         }
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'fonts/[name].[contenthash].[ext]'
+          filename: 'fonts/[name].[contenthash][ext]'
         }
       }
     ]

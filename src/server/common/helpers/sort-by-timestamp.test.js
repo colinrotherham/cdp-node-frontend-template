@@ -1,4 +1,4 @@
-import { sortByTimestamp } from '~/src/common/helpers/sort-by-timestamp'
+import { sortByTimestamp } from '~/src/server/common/helpers/sort-by-timestamp'
 import { productsFixture } from '~/src/__fixtures__/products'
 
 describe('#sortByTimestamp', () => {

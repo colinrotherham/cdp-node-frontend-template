@@ -4,8 +4,8 @@ import { appConfig } from '~/src/config'
 
 import { nunjucksConfig } from '~/src/config/nunjucks'
 import { router } from './router'
-import { requestLogger } from '~/src/common/helpers/request-logger'
-import { catchAll } from '~/src/common/helpers/errors'
+import { requestLogger } from '~/src/server/common/helpers/request-logger'
+import { catchAll } from '~/src/server/common/helpers/errors'
 
 async function createServer() {
   const server = hapi.server({
