@@ -7,6 +7,7 @@ const requestLogger = {
   plugin: hapiPino,
   options: {
     enabled: !appConfig.get('isTest'),
+    redact: ['req.headers.authorization', 'req.headers.cookie', 'res.headers'],
     level: appConfig.get('logLevel'),
     ...(appConfig.get('isDevelopment')
       ? { transport: { target: 'pino-pretty' } }
