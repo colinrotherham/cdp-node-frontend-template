@@ -43,7 +43,7 @@ $chevron-altitude-calculated: govuk-em(5.655px, $font-size);
   float: left;
 
   // Create a chevron using a box with borders on two sides, rotated 45deg.
-  &:before {
+  &::before {
     content: "";
     display: block;
 
@@ -87,7 +87,7 @@ $chevron-altitude-calculated: govuk-em(5.655px, $font-size);
     margin-left: 0;
     padding-left: 0;
 
-    &:before {
+    &::before {
       content: none;
       display: none;
     }
