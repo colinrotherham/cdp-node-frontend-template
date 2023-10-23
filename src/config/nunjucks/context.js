@@ -30,7 +30,6 @@ function buildNavigation(request) {
 
 function context(request) {
   return {
-    version: config.get('version'),
     serviceName: config.get('serviceName'),
     serviceUrl: config.get('appPathPrefix'),
     breadcrumbs: [],
