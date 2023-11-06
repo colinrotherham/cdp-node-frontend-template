@@ -20,8 +20,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Find and replace
         run: |
-          find ./ -type f -exec sed -i 's/cdp-node-frontend-template/${{ github.repository }}/g' {} \;
-          find ./ -type f -exec sed -i 's/CDP Node.js Frontend Template/${{ github.repository }}/g' {} \;
+          repositoryName=`echo "${{ github.repository }}" | awk -F'/' '{print $NF}'
+          find ./ -type f -exec sed -i 's/cdp-node-frontend-template/${{ repositoryName }}/g' {} \;
+          find ./ -type f -exec sed -i 's/CDP Node.js Frontend Template/${{ repositoryName }}/g' {} \;
           contents="$(jq '.version = "0.0.0"' package.json)"
           echo -E "${contents}" > package.json
           contents="$(jq '.version = "0.0.0"' package-lock.json)"
