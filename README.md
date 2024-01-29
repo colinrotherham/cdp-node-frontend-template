@@ -26,8 +26,8 @@ easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
 To use the correct version of Node.js for this application, via nvm:
 
 ```bash
-$ cd cdp-node-frontend-template
-$ nvm use
+cd cdp-node-frontend-template
+nvm use
 ```
 
 ## Local development
@@ -37,7 +37,7 @@ $ nvm use
 Install application dependencies:
 
 ```bash
-$ npm install
+npm install
 ```
 
 ### Development
@@ -45,7 +45,7 @@ $ npm install
 To run the application in `development` mode run:
 
 ```bash
-$ npm run dev
+npm run dev
 ```
 
 ### Local JSON API
@@ -53,7 +53,7 @@ $ npm run dev
 Whilst the APIs are being developed this app uses a local JSON mock API. To start this locally run:
 
 ```bash
-$ npm run mockApi
+npm run mockApi
 ```
 
 ### Production
@@ -61,7 +61,7 @@ $ npm run mockApi
 To mimic the application running in `production` mode locally run:
 
 ```bash
-$ npm start
+npm start
 ```
 
 ### Npm scripts
@@ -70,7 +70,7 @@ All available Npm scripts can be seen in [package.json](./package.json)
 To view them in your command line run:
 
 ```bash
-$ npm run
+npm run
 ```
 
 ## Docker
@@ -80,13 +80,13 @@ $ npm run
 Build:
 
 ```bash
-$ docker build --target development --no-cache --tag cdp-node-frontend-template:development .
+docker build --target development --no-cache --tag cdp-node-frontend-template:development .
 ```
 
 Run:
 
 ```bash
-$ docker run -p 3000:3000 cdp-node-frontend-template:development
+docker run -p 3000:3000 cdp-node-frontend-template:development
 ```
 
 ### Production image
@@ -100,7 +100,7 @@ docker build --no-cache --tag cdp-node-frontend-template .
 Run:
 
 ```bash
-$ docker run -p 3000:3000 cdp-node-frontend-template
+docker run -p 3000:3000 cdp-node-frontend-template
 ```
 
 ## Licence
