@@ -1,5 +1,5 @@
 import convict from 'convict'
-import path from 'path'
+import path from 'node:path'
 
 const oneWeek = 7 * 24 * 60 * 60 * 1000
 
@@ -37,12 +37,6 @@ const config = convict({
     format: String,
     default: '/public',
     env: 'ASSET_PATH'
-  },
-  appPathPrefix: {
-    doc: 'Application url path prefix',
-    format: String,
-    default: '/cdp-node-frontend-template',
-    env: 'APP_PATH_PREFIX'
   },
   isProduction: {
     doc: 'If this application running in the production environment',
