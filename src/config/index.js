@@ -1,5 +1,5 @@
 import convict from 'convict'
-import path from 'path'
+import path from 'node:path'
 
 const oneWeek = 7 * 24 * 60 * 60 * 1000
 
