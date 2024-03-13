@@ -1,12 +1,14 @@
 import { buildNavigation } from '~/src/config/nunjucks/context/build-navigation'
 
-const mockRequest = ({ path = '' } = {}) => ({
+const mockRequest = ({ path } = {}) => ({
   path
 })
 
 describe('#buildNavigation', () => {
   test('Should provide expected navigation details', () => {
-    expect(buildNavigation(mockRequest())).toEqual([
+    expect(
+      buildNavigation(mockRequest({ path: '/non-existent-path' }))
+    ).toEqual([
       {
         isActive: false,
         text: 'Home',
