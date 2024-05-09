@@ -1,5 +1,6 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
+import { Engine as CatboxRedis } from '@hapi/catbox-redis'
 
 import { config } from '~/src/config'
 import { nunjucksConfig } from '~/src/config/nunjucks'
@@ -7,7 +8,9 @@ import { router } from './router'
 import { requestLogger } from '~/src/server/common/helpers/logging/request-logger'
 import { catchAll } from '~/src/server/common/helpers/errors'
 import { secureContext } from '~/src/server/common/helpers/secure-context'
+import { buildRedisClient } from '~/common/helpers/redis-client'
 
+const redisClient = buildRedisClient()
 const isProduction = config.get('isProduction')
 
 async function createServer() {
@@ -35,7 +38,15 @@ async function createServer() {
     },
     router: {
       stripTrailingSlash: true
-    }
+    },
+    cache: [
+      {
+        name: 'session',
+        engine: new CatboxRedis({
+          client: redisClient
+        })
+      }
+    ]
   })
 
   await server.register(requestLogger)
