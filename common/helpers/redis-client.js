@@ -15,50 +15,58 @@ function buildRedisClient() {
   const logger = createLogger()
   const port = 6379
   const db = 0
-  const keyPrefix = config.get('redisKeyPrefix')
+  const redisConfig = config.get('redis')
+  const keyPrefix = redisConfig.keyPrefix
+  const host = redisConfig.host
   let redisClient
 
-  if (config.get('useSingleInstanceCache')) {
-    redisClient = new IoRedis({
-      port,
-      host: config.get('redisHost'),
-      db,
-      keyPrefix
+  if (redisConfig.enabled) {
+    if (redisConfig.useSingleInstanceCache) {
+      redisClient = new IoRedis({
+        port,
+        host,
+        db,
+        keyPrefix
+      })
+    } else {
+      redisClient = new IoRedis.Cluster(
+        [
+          {
+            host,
+            port
+          }
+        ],
+        {
+          keyPrefix,
+          slotsRefreshTimeout: 10000,
+          dnsLookup: (address, callback) => callback(null, address),
+          redisOptions: {
+            username: redisConfig.username,
+            password: redisConfig.password,
+            db,
+            tls: {}
+          }
+        }
+      )
+    }
+
+    redisClient.on('connect', () => {
+      logger.info('Connected to Redis server')
+    })
+
+    redisClient.on('close', () => {
+      logger.info('Redis connection closed attempting reconnect')
+      redisClient.connect()
+    })
+
+    redisClient.on('error', (error) => {
+      logger.error(`Redis connection error ${error}`)
     })
   } else {
-    redisClient = new IoRedis.Cluster(
-      [
-        {
-          host: config.get('redisHost'),
-          port
-        }
-      ],
-      {
-        keyPrefix,
-        slotsRefreshTimeout: 10000,
-        dnsLookup: (address, callback) => callback(null, address),
-        redisOptions: {
-          username: config.get('redisUsername'),
-          password: config.get('redisPassword'),
-          db,
-          tls: {}
-        }
-      }
+    throw new Error(
+      'Before you enable Redis, contact the CDP platform team as we need to set up config so you can run Redis in CDP environments'
     )
   }
-
-  redisClient.on('connect', () => {
-    logger.info('Connected to Redis server')
-  })
-
-  redisClient.on('close', () => {
-    logger.info('Redis connection closed attempting reconnect')
-    redisClient.connect()
-  })
-
-  redisClient.on('error', (error) => {
-    logger.error(`Redis connection error ${error}`)
-  })
 
   return redisClient
 }

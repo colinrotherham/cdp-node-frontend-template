@@ -10,8 +10,8 @@ import { catchAll } from '~/src/server/common/helpers/errors'
 import { secureContext } from '~/src/server/common/helpers/secure-context'
 import { buildRedisClient } from '~/common/helpers/redis-client'
 
-const redisClient = buildRedisClient()
 const isProduction = config.get('isProduction')
+const redisEnabled = config.get('redis.enabled')
 
 async function createServer() {
   const server = hapi.server({
@@ -39,14 +39,16 @@ async function createServer() {
     router: {
       stripTrailingSlash: true
     },
-    cache: [
-      {
-        name: 'session',
-        engine: new CatboxRedis({
-          client: redisClient
-        })
-      }
-    ]
+    ...(redisEnabled && {
+      cache: [
+        {
+          name: 'session',
+          engine: new CatboxRedis({
+            client: buildRedisClient()
+          })
+        }
+      ]
+    })
   })
 
   await server.register(requestLogger)
