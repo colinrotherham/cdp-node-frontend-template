@@ -43,7 +43,7 @@ Redis has been **disabled** in newly created services by setting the `redis.enab
 
 ## Server-side Caching
 
-We use Catbox for server-side caching. Specifically CatboxRedis, the Redis adapter for CatBox. It is important that in memory caching isn't used for server-side caching as this will cause issues when there is more than one instance of your service running. Server-side caching has been **disabled** in newly created services by setting the `redis.enabled` property to `false`. Please see
+We use Catbox for server-side caching. Specifically CatboxRedis, the Redis adapter for CatBox. It is important that in memory caching isn't used for server-side caching as this will cause issues when there is more than one instance of your service running. Server-side caching has been **disabled** in newly created services by setting the `redis.enabled` property to `false`. Please see [Redis](#redis) for more information.
 
 > [!IMPORTANT]
 > If you want to enable server-side caching using Catbox, contact the CDP Platform Team first. Deploying your service with Redis enabled, before we've injected Redis configuration will cause your service to death-loop.
