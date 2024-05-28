@@ -1,7 +1,9 @@
 import convict from 'convict'
 import path from 'node:path'
 
-const oneWeekMillis = 7 * 24 * 60 * 60 * 1000
+const oneHour = 1000 * 60 * 60
+const fourHours = oneHour * 4
+const oneWeekMillis = oneHour * 24 * 7
 
 const config = convict({
   env: {
@@ -72,6 +74,37 @@ const config = convict({
     nullable: true,
     default: null,
     env: 'CDP_HTTPS_PROXY'
+  },
+  session: {
+    cache: {
+      name: {
+        doc: 'server side session cache name',
+        format: String,
+        default: 'session',
+        env: 'SESSION_CACHE_NAME'
+      },
+      ttl: {
+        doc: 'server side session cache ttl',
+        format: Number,
+        default: fourHours,
+        env: 'SESSION_CACHE_TTL'
+      }
+    },
+    cookie: {
+      ttl: {
+        doc: 'Session cookie ttl',
+        format: Number,
+        default: fourHours,
+        env: 'SESSION_COOKIE_TTL'
+      },
+      password: {
+        doc: 'session cookie password',
+        format: String,
+        default: 'the-password-must-be-at-least-32-characters-long',
+        env: 'SESSION_COOKIE_PASSWORD',
+        sensitive: true
+      }
+    }
   },
   redis: {
     enabled: {
