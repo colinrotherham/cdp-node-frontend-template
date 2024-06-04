@@ -14,16 +14,15 @@ const govukFrontendPath = path.dirname(
 )
 
 const webpackConfig = {
-  isDevelopment: process.env.NODE_ENV !== 'production',
-  stylesheets: {
-    components: path.join(dirname, 'src/server/common/components')
-  }
+  isDevelopment: process.env.NODE_ENV !== 'production'
 }
 
 export default {
   context: path.resolve(dirname, 'src/client'),
   entry: {
-    application: './javascripts/application.js'
+    application: {
+      import: ['./javascripts/application.js', './stylesheets/application.scss']
+    }
   },
   mode: webpackConfig.isDevelopment ? 'development' : 'production',
   ...(webpackConfig.isDevelopment && { devtool: 'source-map' }),
@@ -64,25 +63,26 @@ export default {
         }
       },
       {
-        test: /\.(?:s[ac]|c)ss$/i,
+        test: /\.scss$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: 'css-loader',
             options: {
-              esModule: false
+              // Allow sass-loader to process CSS @import first
+              // before we use css-loader to extract `url()` etc
+              importLoaders: 2
             }
           },
-          'css-loader',
-          ...(webpackConfig.isDevelopment ? ['resolve-url-loader'] : []),
           {
             loader: 'sass-loader',
             options: {
-              ...(webpackConfig.isDevelopment && { sourceMap: true }),
               sassOptions: {
-                outputStyle: 'compressed',
-                quietDeps: true,
-                includePaths: [webpackConfig.stylesheets.components]
+                includePaths: [
+                  path.join(dirname, 'src/server/common/components'),
+                  path.join(dirname, 'node_modules')
+                ],
+                quietDeps: true
               }
             }
           }
