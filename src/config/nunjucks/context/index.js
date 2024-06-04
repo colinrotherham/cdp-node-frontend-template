@@ -6,21 +6,17 @@ import { buildNavigation } from '~/src/config/nunjucks/context/build-navigation.
 
 const logger = createLogger()
 const assetPath = config.get('assetPath')
+const manifestPath = path.join(config.get('root'), '.public/manifest.json')
 
-const manifestPath = path.resolve(
-  config.get('root'),
-  '.public',
-  'manifest.json'
-)
-let webpackManifest
+async function context(request) {
+  let webpackManifest
 
-try {
-  webpackManifest = require(manifestPath)
-} catch (error) {
-  logger.error('Webpack Manifest assets file not found')
-}
+  try {
+    webpackManifest = (await import(manifestPath)).default
+  } catch (error) {
+    logger.error('Webpack Manifest assets file not found')
+  }
 
-function context(request) {
   return {
     serviceName: config.get('serviceName'),
     serviceUrl: '/',

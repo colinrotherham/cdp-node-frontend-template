@@ -3,6 +3,7 @@
   "version": "0.15.0",
   "description": "CDP Frontend Template",
   "main": ".server/index.js",
+  "type": "module",
   "engines": {
     "node": ">=20.11.1"
   },
