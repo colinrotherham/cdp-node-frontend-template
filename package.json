@@ -9,8 +9,8 @@
   },
   "scripts": {
     "build": "run-s build:frontend build:server",
-    "build:frontend": "webpack",
-    "build:server": "babel --delete-dir-on-start --ignore \"**/*.test.js\" --ignore \"**/__fixtures__\" --ignore \"**/test-helpers\" --copy-files --no-copy-ignored --out-dir ./.server ./src",
+    "build:frontend": "NODE_ENV=production webpack",
+    "build:server": "NODE_ENV=production babel --delete-dir-on-start --ignore \"**/*.test.js\" --ignore \"**/__fixtures__\" --ignore \"**/test-helpers\" --copy-files --no-copy-ignored --out-dir ./.server ./src",
     "docker:dev": "NODE_ENV=development run-p frontend:watch server:watch",
     "predev": "npm run build:frontend",
     "dev": "run-p frontend:watch server:watch",

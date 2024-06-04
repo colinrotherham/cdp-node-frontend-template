@@ -6,16 +6,14 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
 
+const { NODE_ENV = 'development' } = process.env
+
 const require = createRequire(import.meta.url)
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const govukFrontendPath = path.dirname(
   require.resolve('govuk-frontend/package.json')
 )
-
-const webpackConfig = {
-  isDevelopment: process.env.NODE_ENV !== 'production'
-}
 
 export default {
   context: path.resolve(dirname, 'src/client'),
@@ -24,8 +22,8 @@ export default {
       import: ['./javascripts/application.js', './stylesheets/application.scss']
     }
   },
-  mode: webpackConfig.isDevelopment ? 'development' : 'production',
-  ...(webpackConfig.isDevelopment && { devtool: 'source-map' }),
+  mode: NODE_ENV,
+  devtool: NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   watchOptions: {
     aggregateTimeout: 200,
     poll: 1000
@@ -43,15 +41,11 @@ export default {
   },
   module: {
     rules: [
-      ...(webpackConfig.isDevelopment
-        ? [
-            {
-              test: /\.(js|mjs)$/,
-              enforce: 'pre',
-              use: ['source-map-loader']
-            }
-          ]
-        : []),
+      {
+        test: /\.(js|mjs)$/,
+        loader: 'source-map-loader',
+        enforce: 'pre'
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
