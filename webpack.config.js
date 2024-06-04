@@ -30,7 +30,16 @@ export default {
     poll: 1000
   },
   output: {
-    filename: 'javascripts/[name].[fullhash].js',
+    filename:
+      NODE_ENV === 'production'
+        ? 'javascripts/[name].[contenthash:7].min.js'
+        : 'javascripts/[name].js',
+
+    chunkFilename:
+      NODE_ENV === 'production'
+        ? 'javascripts/[name].[chunkhash:7].min.js'
+        : 'javascripts/[name].js',
+
     path: path.join(dirname, '.public'),
     publicPath: '/public/',
     library: '[name]'
@@ -154,7 +163,10 @@ export default {
     new CleanWebpackPlugin(),
     new WebpackAssetsManifest(),
     new MiniCssExtractPlugin({
-      filename: 'stylesheets/[name].[fullhash].css'
+      filename:
+        NODE_ENV === 'production'
+          ? 'stylesheets/[name].[contenthash:7].min.css'
+          : 'stylesheets/[name].css'
     }),
     new CopyPlugin({
       patterns: [
