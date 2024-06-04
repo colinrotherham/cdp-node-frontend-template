@@ -46,11 +46,13 @@ async function createServer() {
     ]
   })
 
+  await server.register(requestLogger)
+
   if (isProduction) {
     await server.register(secureContext)
   }
 
-  await server.register([requestLogger, sessionCache, nunjucksConfig])
+  await server.register([sessionCache, nunjucksConfig])
 
   // Register all of the controllers/routes defined in src/server/router.js
   await server.register([router])
