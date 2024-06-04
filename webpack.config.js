@@ -4,6 +4,7 @@ import path from 'path'
 import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
 
 const { NODE_ENV = 'development' } = process.env
@@ -48,14 +49,28 @@ export default {
       },
       {
         test: /\.js$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            browserslistEnv: 'javascripts',
-            extends: path.join(dirname, 'babel.config.cjs')
-          }
-        }
+        options: {
+          browserslistEnv: 'javascripts',
+          cacheDirectory: true,
+          extends: path.join(dirname, 'babel.config.cjs'),
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                // Apply bug fixes to avoid transforms
+                bugfixes: true,
+
+                // Apply smaller "loose" transforms for browsers
+                loose: true
+              }
+            ]
+          ]
+        },
+
+        // Flag loaded modules as side effect free
+        sideEffects: false
       },
       {
         test: /\.scss$/,
@@ -128,7 +143,12 @@ export default {
           safari10: true
         }
       })
-    ]
+    ],
+
+    // Skip bundling unused modules
+    providedExports: true,
+    sideEffects: true,
+    usedExports: true
   },
   plugins: [
     new CleanWebpackPlugin(),
