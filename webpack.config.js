@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'path'
+import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
@@ -115,6 +116,14 @@ export default {
     new WebpackAssetsManifest(),
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].[fullhash].css'
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(govukFrontendPath, 'dist/govuk/assets'),
+          to: 'assets'
+        }
+      ]
     })
   ]
 }
