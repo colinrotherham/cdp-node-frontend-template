@@ -46,7 +46,7 @@ export default {
       ...(webpackConfig.isDevelopment
         ? [
             {
-              test: /\.js$/,
+              test: /\.(js|mjs)$/,
               enforce: 'pre',
               use: ['source-map-loader']
             }
