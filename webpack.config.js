@@ -22,7 +22,7 @@ const webpackConfig = {
 export default {
   context: path.resolve(dirname, 'src/client'),
   entry: {
-    application: './assets/javascripts/application.js'
+    application: './javascripts/application.js'
   },
   mode: webpackConfig.isDevelopment ? 'development' : 'production',
   ...(webpackConfig.isDevelopment && { devtool: 'source-map' }),
@@ -31,7 +31,7 @@ export default {
     poll: 1000
   },
   output: {
-    filename: 'js/[name].[fullhash].js',
+    filename: 'javascripts/[name].[fullhash].js',
     path: path.join(dirname, '.public'),
     publicPath: '/public/',
     library: '[name]'
@@ -114,7 +114,7 @@ export default {
     new CleanWebpackPlugin(),
     new WebpackAssetsManifest(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[fullhash].css'
+      filename: 'stylesheets/[name].[fullhash].css'
     })
   ]
 }
