@@ -112,9 +112,7 @@ export default {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new WebpackAssetsManifest({
-      output: 'manifest.json'
-    }),
+    new WebpackAssetsManifest(),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[fullhash].css'
     })
