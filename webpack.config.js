@@ -107,6 +107,29 @@ export default {
       }
     ]
   },
+  optimization: {
+    minimize: NODE_ENV === 'production',
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          // Use webpack default compress options
+          // https://webpack.js.org/configuration/optimization/#optimizationminimizer
+          compress: { passes: 2 },
+
+          // Allow Terser to remove @preserve comments
+          format: { comments: false },
+
+          // Include sources content from dependency source maps
+          sourceMap: {
+            includeSources: true
+          },
+
+          // Compatibility workarounds
+          safari10: true
+        }
+      })
+    ]
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new WebpackAssetsManifest(),
