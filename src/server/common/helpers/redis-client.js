@@ -1,7 +1,7 @@
 import IoRedis from 'ioredis'
 
-import { config } from '~/src/config'
-import { createLogger } from '~/src/server/common/helpers/logging/logger'
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
 
 /**
  * Setup Redis and provide a redis client
