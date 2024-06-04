@@ -23,6 +23,9 @@ export default {
       import: ['./javascripts/application.js', './stylesheets/application.scss']
     }
   },
+  experiments: {
+    outputModule: true
+  },
   mode: NODE_ENV,
   devtool: NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   watchOptions: {
@@ -42,7 +45,8 @@ export default {
 
     path: path.join(dirname, '.public'),
     publicPath: '/public/',
-    library: '[name]'
+    libraryTarget: 'module',
+    module: true
   },
   resolve: {
     alias: {
@@ -72,7 +76,10 @@ export default {
                 bugfixes: true,
 
                 // Apply smaller "loose" transforms for browsers
-                loose: true
+                loose: true,
+
+                // Skip CommonJS modules transform
+                modules: false
               }
             ]
           ]
