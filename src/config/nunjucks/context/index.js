@@ -1,4 +1,5 @@
-import path from 'path'
+import path from 'node:path'
+import { readFileSync } from 'node:fs'
 
 import { config } from '~/src/config/index.js'
 import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
@@ -12,7 +13,7 @@ async function context(request) {
   let webpackManifest
 
   try {
-    webpackManifest = (await import(manifestPath)).default
+    webpackManifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
   } catch (error) {
     logger.error('Webpack Manifest assets file not found')
   }
