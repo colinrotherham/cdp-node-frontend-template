@@ -1,14 +1,14 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
 
-import { config } from '~/src/config'
-import { nunjucksConfig } from '~/src/config/nunjucks'
-import { router } from './router'
-import { requestLogger } from '~/src/server/common/helpers/logging/request-logger'
-import { catchAll } from '~/src/server/common/helpers/errors'
-import { secureContext } from '~/src/server/common/helpers/secure-context'
-import { sessionCache } from '~/src/server/common/helpers/session-cache/session-cache'
-import { getCacheEngine } from '~/src/server/common/helpers/session-cache/cache-engine'
+import { config } from '~/src/config/index.js'
+import { nunjucksConfig } from '~/src/config/nunjucks/index.js'
+import { router } from './router.js'
+import { requestLogger } from '~/src/server/common/helpers/logging/request-logger.js'
+import { catchAll } from '~/src/server/common/helpers/errors.js'
+import { secureContext } from '~/src/server/common/helpers/secure-context/index.js'
+import { sessionCache } from '~/src/server/common/helpers/session-cache/session-cache.js'
+import { getCacheEngine } from '~/src/server/common/helpers/session-cache/cache-engine.js'
 
 const isProduction = config.get('isProduction')
 
@@ -46,11 +46,13 @@ async function createServer() {
     ]
   })
 
+  await server.register(requestLogger)
+
   if (isProduction) {
     await server.register(secureContext)
   }
 
-  await server.register([requestLogger, sessionCache, nunjucksConfig])
+  await server.register([sessionCache, nunjucksConfig])
 
   // Register all of the controllers/routes defined in src/server/router.js
   await server.register([router])

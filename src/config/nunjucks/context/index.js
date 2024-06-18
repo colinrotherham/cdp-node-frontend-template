@@ -1,26 +1,23 @@
-import path from 'path'
+import path from 'node:path'
+import { readFileSync } from 'node:fs'
 
-import { config } from '~/src/config'
-import { createLogger } from '~/src/server/common/helpers/logging/logger'
-import { buildNavigation } from '~/src/config/nunjucks/context/build-navigation'
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
+import { buildNavigation } from '~/src/config/nunjucks/context/build-navigation.js'
 
 const logger = createLogger()
 const assetPath = config.get('assetPath')
+const manifestPath = path.join(config.get('root'), '.public/manifest.json')
 
-const manifestPath = path.resolve(
-  config.get('root'),
-  '.public',
-  'manifest.json'
-)
-let webpackManifest
+async function context(request) {
+  let webpackManifest
 
-try {
-  webpackManifest = require(manifestPath)
-} catch (error) {
-  logger.error('Webpack Manifest assets file not found')
-}
+  try {
+    webpackManifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
+  } catch (error) {
+    logger.error('Webpack Manifest assets file not found')
+  }
 
-function context(request) {
   return {
     serviceName: config.get('serviceName'),
     serviceUrl: '/',

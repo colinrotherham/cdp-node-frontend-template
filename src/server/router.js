@@ -1,9 +1,9 @@
 import inert from '@hapi/inert'
 
-import { health } from '~/src/server/health'
-import { home } from '~/src/server/home'
-import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files'
-import { about } from '~/src/server/about'
+import { health } from '~/src/server/health/index.js'
+import { home } from '~/src/server/home/index.js'
+import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files.js'
+import { about } from '~/src/server/about/index.js'
 
 const router = {
   plugin: {

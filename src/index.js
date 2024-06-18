@@ -1,13 +1,13 @@
-import { config } from '~/src/config'
-import { createServer } from '~/src/server'
-import { createLogger } from '~/src/server/common/helpers/logging/logger'
+import { config } from '~/src/config/index.js'
+import { createServer } from '~/src/server/index.js'
+import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
 
 const logger = createLogger()
 
 process.on('unhandledRejection', (error) => {
   logger.info('Unhandled rejection')
   logger.error(error)
-  process.exit(1)
+  throw error
 })
 
 /**

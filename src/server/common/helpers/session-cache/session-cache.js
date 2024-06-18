@@ -1,6 +1,6 @@
 import yar from '@hapi/yar'
 
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 
 const sessionConfig = config.get('session')
 

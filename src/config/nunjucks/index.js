@@ -1,21 +1,19 @@
+import { fileURLToPath } from 'node:url'
 import path from 'path'
 import nunjucks from 'nunjucks'
 import hapiVision from '@hapi/vision'
 
-import { config } from '~/src/config'
-import { context } from './context'
-import * as filters from './filters'
-import * as globals from './globals'
+import { config } from '~/src/config/index.js'
+import { context } from './context/index.js'
+import * as filters from './filters/index.js'
+import * as globals from './globals.js'
 
+const dirname = path.dirname(fileURLToPath(import.meta.url))
 const nunjucksEnvironment = nunjucks.configure(
   [
     'node_modules/govuk-frontend/dist/',
-    path.normalize(
-      path.resolve(__dirname, '..', '..', 'server', 'common', 'templates')
-    ),
-    path.normalize(
-      path.resolve(__dirname, '..', '..', 'server', 'common', 'components')
-    )
+    path.resolve(dirname, '../../server/common/templates'),
+    path.resolve(dirname, '../../server/common/components')
   ],
   {
     autoescape: true,
@@ -41,7 +39,7 @@ const nunjucksConfig = {
     compileOptions: {
       environment: nunjucksEnvironment
     },
-    relativeTo: path.normalize(path.resolve(__dirname, '..', '..')),
+    relativeTo: path.resolve(dirname, '../..'),
     path: 'server',
     isCached: config.get('isProduction'),
     context

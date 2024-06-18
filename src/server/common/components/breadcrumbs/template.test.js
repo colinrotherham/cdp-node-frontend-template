@@ -1,4 +1,4 @@
-import { renderComponent } from '~/src/server/common/test-helpers/component-helpers'
+import { renderComponent } from '~/src/server/common/test-helpers/component-helpers.js'
 
 describe('Breadcrumbs Component', () => {
   let $breadcrumbs
