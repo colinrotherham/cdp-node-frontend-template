@@ -19,6 +19,7 @@ async function context(request) {
   }
 
   return {
+    assetPath: '/public/assets',
     serviceName: config.get('serviceName'),
     serviceUrl: '/',
     breadcrumbs: [],

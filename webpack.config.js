@@ -1,10 +1,17 @@
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'path'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
 
+const require = createRequire(import.meta.url)
 const dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const govukFrontendPath = path.dirname(
+  require.resolve('govuk-frontend/package.json')
+)
+
 const webpackConfig = {
   isDevelopment: process.env.NODE_ENV !== 'production',
   stylesheets: {
@@ -13,8 +20,9 @@ const webpackConfig = {
 }
 
 export default {
+  context: path.resolve(dirname, 'src/client'),
   entry: {
-    application: './src/client/assets/javascripts/application.js'
+    application: './assets/javascripts/application.js'
   },
   mode: webpackConfig.isDevelopment ? 'development' : 'production',
   ...(webpackConfig.isDevelopment && { devtool: 'source-map' }),
@@ -25,7 +33,13 @@ export default {
   output: {
     filename: 'js/[name].[fullhash].js',
     path: path.join(dirname, '.public'),
+    publicPath: '/public/',
     library: '[name]'
+  },
+  resolve: {
+    alias: {
+      '/public/assets': path.join(govukFrontendPath, 'dist/govuk/assets')
+    }
   },
   module: {
     rules: [
@@ -55,7 +69,6 @@ export default {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              publicPath: '../',
               esModule: false
             }
           },
@@ -78,21 +91,21 @@ export default {
         test: /\.(png|svg|jpe?g|gif)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name].[contenthash][ext]'
+          filename: 'assets/images/[name][ext]'
         }
       },
       {
         test: /\.(ico)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name][ext]'
+          filename: 'assets/images/[name][ext]'
         }
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'fonts/[name].[contenthash][ext]'
+          filename: 'assets/fonts/[name][ext]'
         }
       }
     ]
