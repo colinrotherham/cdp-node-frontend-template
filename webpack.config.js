@@ -52,7 +52,8 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [['@babel/preset-env', { targets: 'defaults' }]]
+            browserslistEnv: 'javascripts',
+            extends: path.join(dirname, 'babel.config.cjs')
           }
         }
       },
@@ -119,5 +120,6 @@ export default {
         }
       ]
     })
-  ]
+  ],
+  target: 'browserslist:javascripts'
 }
