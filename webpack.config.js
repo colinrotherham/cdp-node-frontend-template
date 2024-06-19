@@ -4,6 +4,7 @@ import path from 'path'
 import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
 
 const { NODE_ENV = 'development' } = process.env
@@ -22,6 +23,9 @@ export default {
       import: ['./javascripts/application.js', './stylesheets/application.scss']
     }
   },
+  experiments: {
+    outputModule: true
+  },
   mode: NODE_ENV,
   devtool: NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   watchOptions: {
@@ -29,10 +33,20 @@ export default {
     poll: 1000
   },
   output: {
-    filename: 'javascripts/[name].[fullhash].js',
+    filename:
+      NODE_ENV === 'production'
+        ? 'javascripts/[name].[contenthash:7].min.js'
+        : 'javascripts/[name].js',
+
+    chunkFilename:
+      NODE_ENV === 'production'
+        ? 'javascripts/[name].[chunkhash:7].min.js'
+        : 'javascripts/[name].js',
+
     path: path.join(dirname, '.public'),
     publicPath: '/public/',
-    library: '[name]'
+    libraryTarget: 'module',
+    module: true
   },
   resolve: {
     alias: {
@@ -48,13 +62,31 @@ export default {
       },
       {
         test: /\.js$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [['@babel/preset-env', { targets: 'defaults' }]]
-          }
-        }
+        options: {
+          browserslistEnv: 'javascripts',
+          cacheDirectory: true,
+          extends: path.join(dirname, 'babel.config.cjs'),
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                // Apply bug fixes to avoid transforms
+                bugfixes: true,
+
+                // Apply smaller "loose" transforms for browsers
+                loose: true,
+
+                // Skip CommonJS modules transform
+                modules: false
+              }
+            ]
+          ]
+        },
+
+        // Flag loaded modules as side effect free
+        sideEffects: false
       },
       {
         test: /\.scss$/,
@@ -68,6 +100,7 @@ export default {
               importLoaders: 2
             }
           },
+          'postcss-loader',
           {
             loader: 'sass-loader',
             options: {
@@ -105,11 +138,42 @@ export default {
       }
     ]
   },
+  optimization: {
+    minimize: NODE_ENV === 'production',
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          // Use webpack default compress options
+          // https://webpack.js.org/configuration/optimization/#optimizationminimizer
+          compress: { passes: 2 },
+
+          // Allow Terser to remove @preserve comments
+          format: { comments: false },
+
+          // Include sources content from dependency source maps
+          sourceMap: {
+            includeSources: true
+          },
+
+          // Compatibility workarounds
+          safari10: true
+        }
+      })
+    ],
+
+    // Skip bundling unused modules
+    providedExports: true,
+    sideEffects: true,
+    usedExports: true
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new WebpackAssetsManifest(),
     new MiniCssExtractPlugin({
-      filename: 'stylesheets/[name].[fullhash].css'
+      filename:
+        NODE_ENV === 'production'
+          ? 'stylesheets/[name].[contenthash:7].min.css'
+          : 'stylesheets/[name].css'
     }),
     new CopyPlugin({
       patterns: [
@@ -119,5 +183,6 @@ export default {
         }
       ]
     })
-  ]
+  ],
+  target: 'browserslist:javascripts'
 }
