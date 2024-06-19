@@ -1,5 +1,5 @@
 {
-  "watch": [".public", "./src", "./mock-api"],
+  "watch": [".public/assets-manifest.json", "./src", "./mock-api"],
   "ignore": ["**/*.test.*", "./test-helpers", "./src/common/assets"],
   "ext": "js,json,njk,scss"
 }

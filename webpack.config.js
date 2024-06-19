@@ -1,43 +1,51 @@
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'path'
+import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
 
+const { NODE_ENV = 'development' } = process.env
+
+const require = createRequire(import.meta.url)
 const dirname = path.dirname(fileURLToPath(import.meta.url))
-const webpackConfig = {
-  isDevelopment: process.env.NODE_ENV !== 'production',
-  stylesheets: {
-    components: path.join(dirname, 'src/server/common/components')
-  }
-}
+
+const govukFrontendPath = path.dirname(
+  require.resolve('govuk-frontend/package.json')
+)
 
 export default {
+  context: path.resolve(dirname, 'src/client'),
   entry: {
-    application: './src/client/assets/javascripts/application.js'
+    application: {
+      import: ['./javascripts/application.js', './stylesheets/application.scss']
+    }
   },
-  mode: webpackConfig.isDevelopment ? 'development' : 'production',
-  ...(webpackConfig.isDevelopment && { devtool: 'source-map' }),
+  mode: NODE_ENV,
+  devtool: NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   watchOptions: {
     aggregateTimeout: 200,
     poll: 1000
   },
   output: {
-    filename: 'js/[name].[fullhash].js',
+    filename: 'javascripts/[name].[fullhash].js',
     path: path.join(dirname, '.public'),
+    publicPath: '/public/',
     library: '[name]'
+  },
+  resolve: {
+    alias: {
+      '/public/assets': path.join(govukFrontendPath, 'dist/govuk/assets')
+    }
   },
   module: {
     rules: [
-      ...(webpackConfig.isDevelopment
-        ? [
-            {
-              test: /\.js$/,
-              enforce: 'pre',
-              use: ['source-map-loader']
-            }
-          ]
-        : []),
+      {
+        test: /\.(js|mjs)$/,
+        loader: 'source-map-loader',
+        enforce: 'pre'
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -49,26 +57,26 @@ export default {
         }
       },
       {
-        test: /\.(?:s[ac]|c)ss$/i,
+        test: /\.scss$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: 'css-loader',
             options: {
-              publicPath: '../',
-              esModule: false
+              // Allow sass-loader to process CSS @import first
+              // before we use css-loader to extract `url()` etc
+              importLoaders: 2
             }
           },
-          'css-loader',
-          ...(webpackConfig.isDevelopment ? ['resolve-url-loader'] : []),
           {
             loader: 'sass-loader',
             options: {
-              ...(webpackConfig.isDevelopment && { sourceMap: true }),
               sassOptions: {
-                outputStyle: 'compressed',
-                quietDeps: true,
-                includePaths: [webpackConfig.stylesheets.components]
+                includePaths: [
+                  path.join(dirname, 'src/server/common/components'),
+                  path.join(dirname, 'node_modules')
+                ],
+                quietDeps: true
               }
             }
           }
@@ -78,32 +86,38 @@ export default {
         test: /\.(png|svg|jpe?g|gif)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name].[contenthash][ext]'
+          filename: 'assets/images/[name][ext]'
         }
       },
       {
         test: /\.(ico)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name][ext]'
+          filename: 'assets/images/[name][ext]'
         }
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'fonts/[name].[contenthash][ext]'
+          filename: 'assets/fonts/[name][ext]'
         }
       }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new WebpackAssetsManifest({
-      output: 'manifest.json'
-    }),
+    new WebpackAssetsManifest(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[fullhash].css'
+      filename: 'stylesheets/[name].[fullhash].css'
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(govukFrontendPath, 'dist/govuk/assets'),
+          to: 'assets'
+        }
+      ]
     })
   ]
 }
