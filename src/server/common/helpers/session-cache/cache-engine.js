@@ -5,7 +5,7 @@ import { Engine as CatboxMemory } from '@hapi/catbox-memory'
 import { config } from '~/src/config/index.js'
 import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
 
-function getCacheEngine() {
+export function getCacheEngine() {
   const isProduction = config.get('isProduction')
   const logger = createLogger()
 
@@ -27,4 +27,3 @@ function getCacheEngine() {
     return new CatboxMemory()
   }
 }
-export { getCacheEngine }
