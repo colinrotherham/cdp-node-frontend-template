@@ -103,5 +103,15 @@
     "webpack": "5.91.0",
     "webpack-assets-manifest": "5.2.1",
     "webpack-cli": "5.1.4"
+  },
+  "optionalDependencies": {
+    "@types/convict": "6.1.6",
+    "@types/hapi__catbox-memory": "4.1.8",
+    "@types/jest": "29.5.12",
+    "@types/lodash": "4.17.5",
+    "@types/node": "20.14.9",
+    "@types/nunjucks": "3.2.6",
+    "@types/webpack-assets-manifest": "5.1.4",
+    "postcss-load-config": "6.0.1"
   }
 }
