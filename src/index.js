@@ -12,7 +12,6 @@ process.on('unhandledRejection', (error) => {
 
 /**
  * Main entrypoint to the application.
-
  */
 async function startServer() {
   const server = await createServer()
