@@ -108,7 +108,8 @@ export default {
               sassOptions: {
                 loadPaths: [path.join(dirname, 'src/server/common/components')],
                 quietDeps: true
-              }
+              },
+              warnRuleAsWarning: true
             }
           }
         ]
@@ -182,5 +183,8 @@ export default {
       ]
     })
   ],
+  stats: {
+    loggingDebug: ['sass-loader']
+  },
   target: 'browserslist:javascripts'
 }
