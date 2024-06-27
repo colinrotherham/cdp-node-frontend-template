@@ -31,7 +31,7 @@ function context(request) {
     navigation: buildNavigation(request),
     getAssetPath: function (asset) {
       const webpackAssetPath = webpackManifest?.[asset]
-      return `${assetPath}/${webpackAssetPath}`
+      return `${assetPath}/${webpackAssetPath ?? asset}`
     }
   }
 }
