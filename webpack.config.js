@@ -184,7 +184,9 @@ export default {
     })
   ],
   stats: {
-    loggingDebug: ['sass-loader']
+    errorDetails: true,
+    loggingDebug: ['sass-loader'],
+    preset: 'minimal'
   },
   target: 'browserslist:javascripts'
 }
