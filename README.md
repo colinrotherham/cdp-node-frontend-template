@@ -12,6 +12,8 @@ Core delivery platform Node.js Frontend Template.
   - [Local JSON API](#local-json-api)
   - [Production](#production)
   - [Npm scripts](#npm-scripts)
+  - [Formatting](#formatting)
+    - [Windows prettier issue](#windows-prettier-issue)
 - [Docker](#docker)
   - [Development Image](#development-image)
   - [Production Image](#production-image)
@@ -89,6 +91,16 @@ To view them in your command line run:
 
 ```bash
 npm run
+```
+
+### Formatting
+
+#### Windows prettier issue
+
+If you are having issues with formatting of line breaks on Windows update your global git config by running:
+
+```bash
+git config --global core.autocrlf false
 ```
 
 ## Docker
